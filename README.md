@@ -12,16 +12,18 @@ This widget uses the GitHub REST API to fetch and display various metadata and i
 
 ## ✨ Features
 
-- 🔄 Real-time data fetching via GitHub REST API  
-- ⭐ Displays stars, forks, watchers, issues, and pull requests  
-- 👥 Visualizes top contributors with avatars and commit counts  
-- 📊 Shows languages used with interactive charts  
-- 📅 Displays repository creation date and last updated time  
-- 📜 Shows license information  
-- 🎨 Clean, responsive, and customizable UI  
-- 💻 Works directly in any browser (no server setup)  
-- 🧩 Easily embeddable in websites or README.md files  
-- 📈 Optional visualizations via Chart.js  
+- 🔄 Real-time GitHub Data Fetching
+-⭐ Displays stars, forks, watchers, open issues, and pull requests
+-👥 Visualizes top contributors with avatars and commit counts
+-📊 Showcases programming languages used with interactive charts
+-📅 Displays repository creation date and last updated time
+-📜 Includes license information
+-🎨 Features a clean, responsive, and customizable UI
+-💻 Runs in any browser – no server setup required
+-🧩 Easily embeddable in websites or README.md files
+-📈 Optional visualizations powered by Chart.js
+
+
 
 
 
