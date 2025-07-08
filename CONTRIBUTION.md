@@ -5,7 +5,7 @@ We welcome community contributions!
 1. **Fork** this repository
 2. **Clone** it locally
    ```bash
-   git clone https://github.com/your-username/github-repo-stats-widget.git
+   git clone https://github.com/your-username/readme-activity-calender.git
    ```
 3. **Create a feature branch**
    ```bash
