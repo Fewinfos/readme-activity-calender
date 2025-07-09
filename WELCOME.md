@@ -105,3 +105,10 @@ Want to be showcased as a contributor?
 </p>
 
 > 💬 _Fueled by passion, crafted with purpose — from the minds at **FEWINFOS** 💡💻✨_
+<td align="center">
+  <a href="https://github.com/anitha-2811">
+    <img src="https://github.com/account" width="100px;" alt="Anitha"/><br/>
+    <sub><b>Anitha</b></sub>
+  </a><br/>
+  Contributor
+</td>
