@@ -48,7 +48,7 @@ Please include:
 - Any screenshots or links that help  
 - Whether you'd like a response  
 
-Your privacy and safety are our priority. No retaliation, ever!!
+Your privacy and safety are our priority. No retaliation, ever!!!
 
 ## 🌍 Where This Applies
 
