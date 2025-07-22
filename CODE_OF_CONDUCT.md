@@ -1,63 +1,49 @@
 # 📜 Code of Conduct
 
-Hey there! 👋  
-We want this project to be a safe, respectful, and welcoming place for everyone. Whether you're here to contribute code, open issues, ask questions, or just explore—you're part of our community, and we value you.
+Hey there 👋  
+Welcome to the project — we’re glad you’re here.  
+Our goal is to make this space **safe, respectful, and welcoming** for everyone. Whether you're contributing code, asking questions, reporting issues, or simply exploring, you’re a valued part of our community. 💛
 
 ## 🤝 Our Pledge
 
-We promise to keep this space free of harassment, judgment, or discrimination—regardless of things like age, background, ability, gender identity, experience level, or culture.
+We pledge to make participation in our community a **harassment-free experience for everyone**, regardless of age, ability, background, gender identity, level of experience, or culture.
 
-Everyone deserves to feel respected and heard. 💛
+We believe everyone deserves to feel **respected, supported, and heard**.
 
 ## ✅ What We Appreciate
 
-Here’s how you can help make this community awesome:
+Here’s how we can all help keep this community awesome:
 
-- Be kind and inclusive 🙌  
-- Respect different perspectives 👂  
-- Welcome constructive feedback 🛠️  
-- Support and uplift one another 💬  
-- Focus on learning and improving together 🚀  
+- Be kind, patient, and inclusive 🙌  
+- Respect different viewpoints and experiences 👂  
+- Offer constructive feedback, not criticism 🛠️  
+- Encourage and uplift others 💬  
+- Focus on learning and growing together 🚀  
 
 ## 🚫 What We Don’t Tolerate
 
-To protect the vibe and values of this space, here’s what’s **not** okay:
+To keep this space healthy and positive, the following are **not acceptable**:
 
-- Bullying, threats, or personal attacks  
-- Hate speech or discriminatory jokes  
-- Sharing others' private info without permission  
-- Disruptive or aggressive behavior  
-- Unwelcome sexual language or imagery  
+- Harassment, bullying, or personal attacks  
+- Discrimination or hateful language  
+- Invasion of privacy or doxxing  
+- Disruptive, trolling, or aggressive behavior  
+- Unwelcome sexual attention or content  
 
-## 👩‍⚖️ Maintainers' Role
+## 👩‍⚖️ Maintainers’ Role
 
-Our project maintainers are here to help things run smoothly. If something crosses the line, they’ll take fair action—whether it’s a warning, temporary restriction, or removal from the community.
+Project maintainers are responsible for clarifying community standards and enforcing this Code of Conduct. They’ll take appropriate, fair action if someone crosses the line—this may include warnings, time-outs, or removal from the project space.
 
-We’re serious about keeping things respectful.
+We’re committed to upholding a respectful environment.
 
-## 📬 Reporting an Issue
+## 📬 Reporting Concerns
 
-See something wrong or uncomfortable? Speak up—confidentially.
+If you witness or experience behavior that makes you uncomfortable, please reach out confidentially.
 
-Reach us at: **conduct@fewinfos.org**  
-(You can replace this with any email/contact method you prefer.)
+📧 **conduct@fewinfos.org**
 
-Please include:
-- What happened  
-- Where (issue number, repo, etc.)  
-- Any screenshots or links that help  
-- Whether you'd like a response  
+This email is actively monitored by our team, and we’ll handle reports discreetly and respectfully.
 
-Your privacy and safety are our priority. No retaliation, ever!!!
+---
 
-## 🌍 Where This Applies
-
-This code applies everywhere the project lives:
-- GitHub issues, pull requests, discussions  
-- Any related social or community spaces  
-- When representing the project in public (e.g., meetups, online forums)  
-
-## 🙏 Thanks
-
-Thanks for helping make this a great community! We're excited to have you here. Let’s build something awesome—together. 💻✨
-
+Thank you for helping keep this community positive, productive, and inclusive! 🌟
