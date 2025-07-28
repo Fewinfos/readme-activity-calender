@@ -67,8 +67,14 @@ jobs:
                   if (/print\s*\(/.test(content)) {
                     errorMessages.push(`:warning: File \`${file.filename}\` contains \`print()\`. Remove debug statements before merging.`);
                   }
-                  const longLines = content.split('\n').filter(l => l.length > 120);
-                  if (longLines.length > 0) {
+                  let hasLongLines = false;
+                  for (const line of content.split('\n')) {
+                    if (line.length > 120) {
+                      hasLongLines = true;
+                      break;
+                    }
+                  }
+                  if (hasLongLines) {
                     errorMessages.push(`:warning: File \`${file.filename}\` contains lines longer than 120 characters.`);
                   }
                 }
