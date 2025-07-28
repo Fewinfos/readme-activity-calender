@@ -1,0 +1,137 @@
+name: Auto Review Bot 🤖
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  auto-review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Auto Review Bot Comment, Label & Code Check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              const pr = context.payload.pull_request;
+              const prNumber = pr.number;
+              const prAuthor = pr.user.login;
+              const prTitle = pr.title;
+              const prUrl = pr.html_url;
+              const prBody = pr.body || 'No description provided.';
+              const isDraft = pr.draft;
+              const isBot = pr.user.type && pr.user.type.toLowerCase() === 'bot';
+
+              if (isDraft) {
+                console.log('PR is a draft. Skipping auto-review.');
+                return;
+              }
+              if (isBot) {
+                console.log('PR opened by a bot. Skipping auto-review.');
+                return;
+              }
+
+              const changedFiles = await github.rest.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+
+              let errorMessages = [];
+              for (const file of changedFiles.data) {
+                if (file.filename.endsWith('.js') || file.filename.endsWith('.py')) {
+                  const fileContentResp = await github.rest.repos.getContent({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    path: file.filename,
+                    ref: pr.head.ref
+                  });
+                  let content = '';
+                  if (fileContentResp.data && fileContentResp.data.content) {
+                    content = Buffer.from(fileContentResp.data.content, 'base64').toString('utf8');
+                  }
+
+                  if (/\t/.test(content)) {
+                    errorMessages.push(`:warning: File \`${file.filename}\` contains tab characters. Use spaces for indentation.`);
+                  }
+                  if (/TODO/i.test(content)) {
+                    errorMessages.push(`:warning: File \`${file.filename}\` contains TODO comments. Please address them before merging.`);
+                  }
+                  if (/console\.log/.test(content)) {
+                    errorMessages.push(`:warning: File \`${file.filename}\` contains \`console.log\`. Remove debug statements before merging.`);
+                  }
+                  if (/print\s*\(/.test(content)) {
+                    errorMessages.push(`:warning: File \`${file.filename}\` contains \`print()\`. Remove debug statements before merging.`);
+                  }
+                  const longLines = content.split('\n').filter(l => l.length > 120);
+                  if (longLines.length > 0) {
+                    errorMessages.push(`:warning: File \`${file.filename}\` contains lines longer than 120 characters.`);
+                  }
+                }
+              }
+
+              const message = [
+                `👋 **Hello @${prAuthor}!**`,
+                '',
+                `Thank you for opening this pull request: _${prTitle}_`,
+                '',
+                `🔗 [View this PR](${prUrl})`,
+                '',
+                '---',
+                '🤖 **This is an automatic review message from the bot.**',
+                'A maintainer will review your contribution soon. In the meantime, please ensure:',
+                '',
+                '- [x] Your code is clean and well-documented',
+                '- [x] You followed the [contribution guide](CONTRIBUTING.md)',
+                '- [x] All tests (if any) pass',
+                '- [x] You have fun building awesome things! 😄',
+                '',
+                '**PR Summary:**',
+                '```',
+                prBody,
+                '```',
+                '',
+                '_Thank you for contributing!_'
+              ].join('\n');
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: message
+              });
+
+              if (errorMessages.length > 0) {
+                const errorMsg = [
+                  ':x: **Automatic Code Review Found Issues:**',
+                  '',
+                  ...errorMessages,
+                  '',
+                  'Please address these issues before requesting a review.'
+                ].join('\n');
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  body: errorMsg
+                });
+              }
+
+              const labelsToAdd = ['auto-review'];
+              if (/feature|enhance|improve|add/i.test(prTitle)) {
+                labelsToAdd.push('enhancement');
+              }
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: labelsToAdd
+              });
+
+            } catch (error) {
+              core.setFailed(`❌ Auto-review bot failed: ${error.message}`);
+            }
