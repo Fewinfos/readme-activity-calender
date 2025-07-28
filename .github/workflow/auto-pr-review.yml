@@ -122,7 +122,7 @@ jobs:
               }
 
               const labelsToAdd = ['auto-review'];
-              if (/feature|enhance|improve|add/i.test(prTitle)) {
+              if (/\b(feature|enhance|improve|add)\b/i.test(prTitle)) {
                 labelsToAdd.push('enhancement');
               }
               await github.rest.issues.addLabels({
