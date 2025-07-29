@@ -1,0 +1,182 @@
+
+# =============================
+#  Auto Review Bot 🤖 Workflow
+#  - Posts a welcome message on PR open
+#  - Reviews code for common issues
+#  - Adds labels based on PR type
+#  - Summarizes all feedback in a single comment
+# =============================
+name: Auto Review Bot 🤖
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  auto-review:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Step 1: Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Run the auto-review bot script
+      - name: Auto Review Bot Comment, Label & Code Check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Import core for error handling
+            const core = require('@actions/core');
+            try {
+              // --- Gather PR metadata ---
+              const pr = context.payload.pull_request;
+              const prNumber = pr.number;
+              const prAuthor = pr.user.login;
+              const prTitle = pr.title;
+              const prUrl = pr.html_url;
+              const prBody = pr.body || 'No description provided.';
+              const isDraft = pr.draft;
+              const isBot = pr.user.type && pr.user.type.toLowerCase() === 'bot';
+
+              // --- Skip drafts and bot PRs ---
+              if (isDraft) {
+                console.log('PR is a draft. Skipping auto-review.');
+                return;
+              }
+              if (isBot) {
+                console.log('PR opened by a bot. Skipping auto-review.');
+                return;
+              }
+
+              // --- Get changed files in the PR ---
+              const changedFiles = await github.rest.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+
+              // --- Analyze each file for common issues ---
+              let errorMessages = [];
+              for (const file of changedFiles.data) {
+                // Review all file types, but skip binary and large files
+                try {
+                  // Fetch file content from PR head commit
+                  const fileContentResp = await github.rest.repos.getContent({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    path: file.filename,
+                    ref: pr.head.sha
+                  });
+                  let content = '';
+                  // Only review text files (GitHub API returns 'type: file' for text, 'type: symlink', 'type: submodule', etc.)
+                  if (fileContentResp.data && fileContentResp.data.content && fileContentResp.data.encoding === 'base64') {
+                    // Heuristic: skip files with null bytes or very large files (>200KB)
+                    const raw = Buffer.from(fileContentResp.data.content, 'base64');
+                    if (raw.length > 200 * 1024) {
+                      errorMessages.push(`:warning: File \`${file.filename}\` is too large to review automatically.`);
+                      continue;
+                    }
+                    // Check for binary (null bytes)
+                    if (/\x00/.test(raw.toString('latin1'))) {
+                      errorMessages.push(`:information_source: File \`${file.filename}\` appears to be binary and was skipped.`);
+                      continue;
+                    }
+                    content = raw.toString('utf8');
+                  } else {
+                    errorMessages.push(`:information_source: File \`${file.filename}\` could not be reviewed (not a regular file or missing content).`);
+                    continue;
+                  }
+
+                  // --- Code review checks for all text files ---
+                  // 1. TODO comments
+                  if (/TODO/i.test(content)) {
+                    errorMessages.push(`:warning: File \`${file.filename}\` contains TODO comments. Please address them before merging.`);
+                  }
+                  // 2. console.log (JS/TS)
+                  if (/console\.log/.test(content)) {
+                    errorMessages.push(`:warning: File \`${file.filename}\` contains \`console.log\`. Remove debug statements before merging.`);
+                  }
+                  // 3. print() (Python)
+                  if (/print\s*\(/.test(content)) {
+                    errorMessages.push(`:warning: File \`${file.filename}\` contains \`print()\`. Remove debug statements before merging.`);
+                  }
+                  // 4. Long lines
+                  const longLines = content.split('\n').filter(l => l.length > MAX_LINE_LENGTH);
+                  if (longLines.length > 0) {
+                    errorMessages.push(`:warning: File \`${file.filename}\` contains lines longer than 120 characters.`);
+                  }
+                } catch (err) {
+                  // If file content can't be fetched, warn but don't fail
+                  errorMessages.push(`:warning: Could not fetch content for file \`${file.filename}\`: ${err.message}`);
+                }
+              }
+
+              // --- Compose the main bot message ---
+              const message = [
+                `👋 **Hello @${prAuthor}!**`,
+                '',
+                `Thank you for opening this pull request: _${prTitle}_`,
+                '',
+                `🔗 [View this PR](${prUrl})`,
+                '',
+                '---',
+                '🤖 **This is an automatic review message from the bot.**',
+                'A maintainer will review your contribution soon. In the meantime, please ensure:',
+                '',
+                '- [x] Your code is clean and well-documented',
+                '- [x] You followed the [contribution guide](CONTRIBUTING.md)',
+                '- [x] All tests (if any) pass',
+                '- [x] You have fun building awesome things! 😄',
+                '',
+                '**PR Summary:**',
+                '```',
+                prBody,
+                '```',
+                '',
+                '_Thank you for contributing!_'
+              ].join('\n');
+
+              // --- Post a single comment with both the welcome and error messages (if any) ---
+              let finalBody = message;
+              if (errorMessages.length > 0) {
+                finalBody += [
+                  '\n---\n',
+                  ':x: **Automatic Code Review Found Issues:**',
+                  '',
+                  ...errorMessages,
+                  '',
+                  'Please address these issues before requesting a review.'
+                ].join('\n');
+              }
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: finalBody
+              });
+
+              // --- Add labels: auto-review, enhancement, bug, documentation ---
+              const labelsToAdd = ['auto-review'];
+              if (/feature|enhance|improve|add/i.test(prTitle)) {
+                labelsToAdd.push('enhancement');
+              }
+              if (/fix|bug/i.test(prTitle)) {
+                labelsToAdd.push('bug');
+              }
+              if (/doc|readme/i.test(prTitle)) {
+                labelsToAdd.push('documentation');
+              }
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: labelsToAdd
+              });
+
+            } catch (error) {
+              // Log and fail the workflow if the script errors
+              console.error('Auto-review bot error:', error);
+              core.setFailed(`❌ Auto-review bot failed: ${error.message}`);
+            }
