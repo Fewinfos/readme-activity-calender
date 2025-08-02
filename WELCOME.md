@@ -83,9 +83,4 @@ Want to be showcased as a contributor?
 </p>
 
 > 💬 _Fueled by passion, crafted with purpose — from the minds at **FEWINFOS** 💡💻✨_
-<td align="center">
-      <a href="https://github.com/Karunya-csbs">
-        <img src="https://avatars.githubusercontent.com/u/177417444?v=4" width="100px;" alt="karunya"/><br/>
-        <sub><b>Karunya</b></sub>
-      </a>
-     </td>
+
