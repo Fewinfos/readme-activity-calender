@@ -1,0 +1,36 @@
+name: 🤖 Auto PR Review Bot
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  auto-review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧠 Leave a helpful review comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prAuthor = context.payload.pull_request.user.login;
+            const body = `
+
+We've received your pull request. Here's a quick checklist before we begin our review:
+
+- ✅ Make sure your changes follow the [Contribution Guidelines](https://github.com/Fewinfos/readme-activity-calender/blob/main/CONTRIBUTING.md)
+- 🧪 Test your code before submitting
+- ✍️ Write clear commit messages (e.g. \`fix: corrected layout bug\`)
+- 🧹 Ensure formatting and style are consistent
+- 📸 Screenshots/demos (if UI-related) are very helpful
+
+We'll review your PR soon. Thank you for contributing! 🙌
+
+— 🤖 Auto Review Bot by [@kumaresan-07](https://github.com/kumaresan-07)
+            `;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
