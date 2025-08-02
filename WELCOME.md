@@ -59,6 +59,13 @@ Want to be showcased as a contributor?
       </a><br/>
       CTO
     </td>
+    <td align="center">
+      <a href="https://github.com/Karunya-csbs">
+        <img src="https://avatars.githubusercontent.com/u/177417444?v=4" width="100px;" alt="karunya"/><br/>
+        <sub><b>Karunya</b></sub>
+      </a><br/>
+      Contributor
+     </td>
   </tr>
 </table>
 
