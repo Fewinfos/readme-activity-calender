@@ -1,0 +1,44 @@
+name: Welcome New Contributor
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Welcome first-time contributor
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prUser = context.payload.pull_request.user.login;
+            const repo = context.repo.repo;
+            const owner = context.repo.owner;
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              creator: prUser,
+              state: 'all'
+            });
+
+            const prCount = issues.filter(issue => issue.pull_request).length;
+
+            if (prCount === 1) {
+              const welcomeMessage = `👋 Hi @${prUser}! Thanks for your first pull request. Welcome to the project! 🎉
+              We're thrilled to have you here. This is a collaborative space where everyone's contributions are valued.
+              🔧 **Next steps**:
+              - A maintainer will review your PR soon.
+              - Feel free to ask questions or suggest improvements.
+              - Explore other issues if you're looking to contribute more`;
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: context.payload.pull_request.number,
+                body: welcomeMessage
+              });
+            }
