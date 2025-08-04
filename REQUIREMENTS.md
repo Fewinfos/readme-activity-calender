@@ -11,7 +11,7 @@ These are the platforms or utilities you'll use during development:
 | Tool                  | Purpose                                                         |
 |-----------------------|-----------------------------------------------------------------|
 | **VS Code** or any text editor | To write and manage code (HTML, CSS, JS)            |
-| **Git**               | Version control and pushing code to GitHub                      |
+| **Git**               | Version control and pushing code to GitHub                      | 
 | **GitHub**            | Hosting code, using GitHub REST API, and deployment             |
 | **Web Browser**       | To run, test, and view the widget (e.g., Chrome, Firefox)       |
  
