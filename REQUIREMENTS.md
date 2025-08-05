@@ -14,7 +14,7 @@ These are the platforms or utilities you'll use during development:
 | **Git**               | Version control and pushing code to GitHub                      |
 | **GitHub**            | Hosting code, using GitHub REST API, and deployment             |
 | **Web Browser**       | To run, test, and view the widget (e.g., Chrome, Firefox)       |
-
+ 
 ---
 
 ## 💻 Software / Libraries
