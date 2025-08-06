@@ -1,7 +1,7 @@
 name: Welcome New Contributor
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened]
 
 jobs:
@@ -12,7 +12,7 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Welcome first-time contributor
+      - name: Welcome first time contributor
         uses: actions/github-script@v7
         with:
           script: |
@@ -33,7 +33,7 @@ jobs:
             if (prCount <= 1) {
               const welcomeMessage = `👋 **Hi @${prUser}!** Thanks for your first pull request and welcome to the project! 🎉
 
-              We're thrilled to have you here. This is a collaborative space where everyone's contributions are valued.
+              Good to have you here. This is a collaborative space where everyone's contributions are valued.
 
               ### 🔧 Next steps:
               - A maintainer will review your PR shortly.
