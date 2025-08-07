@@ -16,4 +16,4 @@ assets:
 code:
   - changed-files:
       - any-glob-to-any-file:
-          - "**/*.js"
+          - "**/*.js" 
