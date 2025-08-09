@@ -13,8 +13,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const reviewers = ["navi-04"]; // add usernames
-            await github.pulls.requestReviewers({
+            const reviewers = ["navi-04", "copilot"]; // add usernames here
+            await github.rest.pulls.requestReviewers({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
