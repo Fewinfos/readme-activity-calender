@@ -6,7 +6,7 @@ on:
 
 jobs:
   add-reviewers:
-    if: github.repository == 'Fewinfos/readme-activity-calender'
+    if: github.repository == 'Fewinfos/github-repo-readme-stats'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
