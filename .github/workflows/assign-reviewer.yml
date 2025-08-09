@@ -6,6 +6,7 @@ on:
 
 jobs:
   add-reviewers:
+    if: github.repository == 'Fewinfos/readme-activity-calender'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -15,10 +16,17 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const reviewers = ["navi-04"]; //  reviewers
-            await github.rest.pulls.requestReviewers({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              reviewers
-            });
+            const reviewers = ["navi-04"]; // List of reviewers
+            
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                reviewers: reviewers  // Added missing colon
+              });
+              console.log(`Successfully assigned reviewers: ${reviewers.join(', ')}`);
+            } catch (error) {
+              console.error('Failed to assign reviewers:', error);
+              throw error;
+            }
