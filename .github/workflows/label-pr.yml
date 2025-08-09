@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   triage:
-    if: github.repository == 'Fewinfos/readme-activity-calender'
+    if: github.repository == 'Fewinfos/github-repo-readme-stats'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -31,7 +31,3 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           sync-labels: false
           configuration-path: .github/labeler.yml
-
-
-
-
