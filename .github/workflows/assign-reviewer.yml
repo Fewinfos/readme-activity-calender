@@ -7,16 +7,18 @@ on:
 jobs:
   add-reviewers:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
-      - name: Add reviewers
+      - name: Assign reviewers
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const reviewers = ["navi-04", "copilot"]; // add usernames here
+            const reviewers = ["navi-04"]; //  reviewers
             await github.rest.pulls.requestReviewers({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
-              reviewers: reviewers
+              reviewers
             });
